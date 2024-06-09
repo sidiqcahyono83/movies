@@ -29,7 +29,6 @@ app.delete("/movies/:id", (c) => {
 	const movie = movies.find((movies) => movies.id === id);
 
 	if (!movie) {
-		c.status(404);
 		return c.json({ message: "Movies Not Found" });
 	}
 
