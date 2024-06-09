@@ -1,7 +1,5 @@
 import { Hono } from "hono";
-import { getmovieById, getmoviesAll } from "./data/config";
 import { dataMovies } from "./data/movies";
-import { jsx } from "hono/jsx";
 
 const app = new Hono();
 
@@ -11,11 +9,19 @@ app.get("/", (c) => {
 		movies: "/movies",
 	});
 });
-app.get("/movies", getmoviesAll);
 
-app.get("/movies/:id", getmovieById);
+app.get("/movies", (c) => {
+	return c.json(dataMovies);
+});
 
-app.post("/movies/add", (c) => c.text("Created!", 201));
+app.get("/movies/:id", (c) => {
+	const id = Number(c.req.param("id"));
+	const movie = dataMovies.find((movie) => movie.id === id);
+	if (!movie) {
+		return c.json({ message: "movie not found" });
+	}
+	return c.json(movie);
+});
 
 app.delete("/movies/:id", (c) => {
 	let movies = dataMovies;
