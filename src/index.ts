@@ -1,9 +1,8 @@
 import { Hono } from "hono";
+import { stream, streamText, streamSSE } from "hono/streaming";
 import { dataMovies } from "./data/movies";
 
 const app = new Hono();
-
-let movies: string | any[] = [];
 
 app.get("/", (c) => {
 	return c.json({
@@ -51,9 +50,18 @@ app.post("/movies", async (c) => {
 		duration,
 	};
 
-	movie = [...movies, newMovie];
+	movie = [...movie, newMovie];
 
 	return c.json(newMovie);
+});
+
+app.get("/movies/stream", (c) => {
+	let movies = dataMovies;
+	return streamText(c, async (stream) => {
+		for (const movie of movies) {
+			await stream.writeln(JSON.stringify(movie));
+		}
+	});
 });
 
 export default app;
