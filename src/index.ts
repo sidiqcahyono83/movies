@@ -42,12 +42,13 @@ app.delete("/movies/:id", (c) => {
 app.post("/movies", async (c) => {
 	let movie = dataMovies;
 
-	const { title } = await c.req.json();
+	const { title, duration } = await c.req.json();
 	const nextId = movie[movie.length - 1].id + 1;
 
 	const newMovie = {
 		id: nextId,
 		title,
+		duration,
 	};
 
 	movie = [...movies, newMovie];
