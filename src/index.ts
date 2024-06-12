@@ -3,6 +3,8 @@ import { dataMovies } from "./data/movies";
 
 const app = new Hono();
 
+let movies: string | any[] = [];
+
 app.get("/", (c) => {
 	return c.json({
 		message: "Movie API",
@@ -37,19 +39,20 @@ app.delete("/movies/:id", (c) => {
 	return c.json(`movies number ${id} id deleted`);
 });
 
-app.post("/movies", (c) => {
+app.post("/movies", async (c) => {
 	let movie = dataMovies;
 
+	const { title } = await c.req.json();
 	const nextId = movie[movie.length - 1].id + 1;
 
 	const newMovie = {
 		id: nextId,
-		title: "crime",
+		title,
 	};
 
-	movie = [...movie, newMovie];
+	movie = [...movies, newMovie];
 
-	return c.json({ movie: newMovie });
+	return c.json(newMovie);
 });
 
 export default app;
