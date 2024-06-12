@@ -66,20 +66,23 @@ app.get("/stream", (c) => {
 });
 
 app.put("movies/:id", async (c) => {
+	let movies = dataMovies;
+
 	const idParam = Number(c.req.param());
 	const id = idParam;
-	const index = dataMovies.findIndex((dataMovies) => dataMovies.id === id);
+	const movie = dataMovies.findIndex((movie) => movie.id === id);
 
-	if (index === -1) {
+	if (!movie) {
 		return c.json({ massage: `Movie with ${id} not found` });
 	}
 	const { title, duration } = await c.req.json();
-	dataMovies[index] = {
-		...dataMovies[index],
-		title: title,
-		duration: duration,
+	const newMovie = {
+		id,
+		title,
+		duration,
 	};
-	return c.json(dataMovies[index]);
+	movies = [...movies, newMovie];
+	return c.json(newMovie);
 });
 
 export default app;
