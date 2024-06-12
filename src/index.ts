@@ -55,7 +55,7 @@ app.post("/movies", async (c) => {
 	return c.json(newMovie);
 });
 
-app.get("/movies/stream", (c) => {
+app.get("/stream", (c) => {
 	let movies = dataMovies;
 	return streamText(c, async (stream) => {
 		for (const movie of movies) {
