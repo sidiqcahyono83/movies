@@ -60,8 +60,26 @@ app.get("/stream", (c) => {
 	return streamText(c, async (stream) => {
 		for (const movie of movies) {
 			await stream.writeln(JSON.stringify(movie));
+			await stream.sleep(1000);
 		}
 	});
+});
+
+app.put("movies/:id", async (c) => {
+	const idParam = Number(c.req.param());
+	const id = idParam;
+	const index = dataMovies.findIndex((dataMovies) => dataMovies.id === id);
+
+	if (index === -1) {
+		return c.json({ massage: `Movie with ${id} not found` });
+	}
+	const { title, duration } = await c.req.json();
+	dataMovies[index] = {
+		...dataMovies[index],
+		title: title,
+		duration: duration,
+	};
+	return c.json(dataMovies[index]);
 });
 
 export default app;
