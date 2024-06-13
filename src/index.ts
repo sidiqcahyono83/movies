@@ -35,7 +35,7 @@ app.delete("/movies/:id", (c) => {
 
 	movies = movies.filter((movies) => movies.id !== id);
 
-	return c.json(`movies by ID ${id} deleted`);
+	return c.json(`movies by Title ${id} deleted`);
 });
 
 app.post("/movies", async (c) => {
@@ -81,5 +81,9 @@ app.put("movies/:id", async (c) => {
 	})
 	return c.json(newMovie);
 });
+
+const port = 3000
+console.log(`Rest Movies run in PORT: ${port}`);
+
 
 export default app;
