@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { dataMovies } from "./data/movies";
 
 const app = new Hono();
+let movies = dataMovies;
 
 app.get("/", (c) => {
 	return c.json({
@@ -11,12 +12,12 @@ app.get("/", (c) => {
 });
 
 app.get("/movies", (c) => {
-	return c.json(dataMovies);
+	return c.json(movies);
 });
 
 app.get("/movies/:id", (c) => {
 	const id = Number(c.req.param("id"));
-	const movie = dataMovies.find((movie) => movie.id === id);
+	const movie = dataMovies.find((movies) => movies.id === id);
 	if (!movie) {
 		return c.json({ message: "movie not found" });
 	}
@@ -24,7 +25,7 @@ app.get("/movies/:id", (c) => {
 });
 
 app.delete("/movies/:id", (c) => {
-	let movies = dataMovies;
+	
 	const id = Number(c.req.param("id"));
 	const movie = movies.find((movies) => movies.id === id);
 
@@ -34,14 +35,14 @@ app.delete("/movies/:id", (c) => {
 
 	movies = movies.filter((movies) => movies.id !== id);
 
-	return c.json(`movies number ${id} id deleted`);
+	return c.json(`movies by ID ${id} deleted`);
 });
 
 app.post("/movies", async (c) => {
-	let movie = dataMovies;
 
 	const { title, duration } = await c.req.json();
-	const nextId = movie[movie.length - 1].id + 1;
+	
+	const nextId = movies[movies.length - 1].id + 1;
 
 	const newMovie = {
 		id: nextId,
@@ -49,20 +50,19 @@ app.post("/movies", async (c) => {
 		duration,
 	};
 
-	movie = [...movie, newMovie];
+	movies = [...movies, newMovie];
 
 	return c.json(newMovie);
 });
 
 
 app.put("movies/:id", async (c) => {
-	let movies = dataMovies;
 
 	const id = Number(c.req.param("id"));
 	const movie = dataMovies.find((movie) => movie.id === id);
 
 	if (!movie) {
-		return c.json({ massage: `Movie with ${id} not found` });
+		return c.json({ massage: `Movie by ${id} not found` });
 	}
 	const { title, duration } = await c.req.json();
 	const newMovie = {
@@ -70,7 +70,13 @@ app.put("movies/:id", async (c) => {
 		title,
 		duration,
 	};
-	movies = [...movies, newMovie];
+	movies = movies.map((movie)=>{
+		if(movie.id === id){
+			return newMovie
+		}else{
+			return movie
+		}
+	})
 	return c.json(newMovie);
 });
 

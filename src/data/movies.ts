@@ -1,10 +1,10 @@
-type Movies = {
+type Movie = {
 	id: number;
 	title: string;
 	duration: string;
 };
 
-export const dataMovies: Movies[] = [
+export const dataMovies: Movie[] = [
 	{
 		id: 1,
 		title: "action",
