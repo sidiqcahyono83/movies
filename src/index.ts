@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { stream, streamText, streamSSE } from "hono/streaming";
 import { dataMovies } from "./data/movies";
 
 const app = new Hono();
@@ -55,22 +54,12 @@ app.post("/movies", async (c) => {
 	return c.json(newMovie);
 });
 
-app.get("/stream", (c) => {
-	let movies = dataMovies;
-	return streamText(c, async (stream) => {
-		for (const movie of movies) {
-			await stream.writeln(JSON.stringify(movie));
-			await stream.sleep(1000);
-		}
-	});
-});
 
 app.put("movies/:id", async (c) => {
 	let movies = dataMovies;
 
-	const idParam = Number(c.req.param());
-	const id = idParam;
-	const movie = dataMovies.findIndex((movie) => movie.id === id);
+	const id = Number(c.req.param("id"));
+	const movie = dataMovies.find((movie) => movie.id === id);
 
 	if (!movie) {
 		return c.json({ massage: `Movie with ${id} not found` });
