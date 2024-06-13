@@ -12,6 +12,11 @@ app.get("/", (c) => {
 });
 
 app.get("/movies", (c) => {
+
+	if(movies.length <= 0){
+		return c.json({massage:"Data movies is none, please seeds data movies"});
+	}
+
 	return c.json(movies);
 });
 
@@ -37,6 +42,18 @@ app.delete("/movies/:id", (c) => {
 
 	return c.json(`movies by Title ${id} deleted`);
 });
+
+app.delete("/movies", (c) => {
+	movies = []
+
+	return c.json({massage: "All movies succes deleted"});
+});
+
+app.post("/movies/seeds", (c)=>{
+	movies=dataMovies
+
+	return c.json({massage: "Data movies have succes seedes"})
+})
 
 app.post("/movies", async (c) => {
 
