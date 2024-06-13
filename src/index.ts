@@ -41,7 +41,7 @@ app.delete("/movies/:id", (c) => {
 app.post("/movies", async (c) => {
 
 	const { title, duration } = await c.req.json();
-	
+
 	const nextId = movies[movies.length - 1].id + 1;
 
 	const newMovie = {
@@ -59,17 +59,19 @@ app.post("/movies", async (c) => {
 app.put("movies/:id", async (c) => {
 
 	const id = Number(c.req.param("id"));
-	const movie = dataMovies.find((movie) => movie.id === id);
+	const movie = movies.find((movie) => movie.id === id);
 
 	if (!movie) {
 		return c.json({ massage: `Movie by ${id} not found` });
 	}
 	const { title, duration } = await c.req.json();
+
 	const newMovie = {
 		id,
 		title,
 		duration,
 	};
+
 	movies = movies.map((movie)=>{
 		if(movie.id === id){
 			return newMovie
