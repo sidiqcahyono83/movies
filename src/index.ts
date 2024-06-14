@@ -57,7 +57,11 @@ app.post("/movies/seeds", (c)=>{
 
 app.post("/movies", async (c) => {
 
-	const { title, duration } = await c.req.json();
+	const { title, duration,director,
+		actors,
+		producedBy,
+		releaseDate,
+		genre, } = await c.req.json();
 
 	const nextId = movies[movies.length - 1].id + 1;
 
@@ -65,6 +69,11 @@ app.post("/movies", async (c) => {
 		id: nextId,
 		title,
 		duration,
+		director,
+		actors,
+		producedBy,
+		releaseDate,
+		genre,
 	};
 
 	movies = [...movies, newMovie];
@@ -81,12 +90,21 @@ app.put("movies/:id", async (c) => {
 	if (!movie) {
 		return c.json({ massage: `Movie by ${id} not found` });
 	}
-	const { title, duration } = await c.req.json();
+	const { title, duration,director,
+		actors,
+		producedBy,
+		releaseDate,
+		genre, } = await c.req.json();
 
 	const newMovie = {
 		id,
 		title,
 		duration,
+		director,
+		actors,
+		producedBy,
+		releaseDate,
+		genre,
 	};
 
 	movies = movies.map((movie)=>{
