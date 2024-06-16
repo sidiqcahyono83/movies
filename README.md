@@ -13,30 +13,15 @@ bun run dev
 ```
 
 open http://localhost:3000
-or http://127.0.0.1:3000
 
-## Show movies all
+## End point
 
-```sh
-http://127.0.0.1:3000/movies
-```
-
-To show movies by id
-
-```sh
-http://127.0.0.1:3000/movies/1
-```
-
-## use postman
-
-Delet byId
-
-```sh
-DELETE http://127.0.0.1:3000/movies/1
-```
-
-Update byId
-
-```sh
-PUT http://127.0.0.1:3000/movies/1
-```
+| Endpoint       | HTTP     | Description             |
+| -------------- | -------- | ----------------------- |
+| `/movies`      | `GET`    | Get all movies          |
+| `/movies/:id`  | `GET`    | Get movie by id         |
+| `/movies/seed` | `POST`   | Seed all initial movies |
+| `/movies`      | `POST`   | Add new movie           |
+| `/movies`      | `DELETE` | Delete all movies       |
+| `/movies/:id`  | `DELETE` | Delete movie by id      |
+| `/movies/:id`  | `PUT`    | Update movie by id      |
