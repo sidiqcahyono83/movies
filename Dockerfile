@@ -1,12 +1,17 @@
+# Use the official Bun image from the Docker Hub
 FROM oven/bun:latest
 
-COPY package.json ./
-COPY bun.lockb ./
+# Create and change to the app directory
+WORKDIR /usr/src/app
+
+# Copy app files
 COPY . .
 
+# Install app dependencies
 RUN bun install
 
-
+# Bind the app to port 3000
 EXPOSE 3000
 
-CMD ["bun", "start"]
+# Run the application
+CMD ["bun", "satrt"]
