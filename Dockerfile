@@ -1,5 +1,5 @@
-# Use the official Bun image from the Docker Hub
-FROM oven/bun:latest
+# Use the official Node.js image from the Docker Hub
+FROM oven/bun:debian
 
 # Create and change to the app directory
 WORKDIR /usr/src/app
@@ -14,4 +14,4 @@ RUN bun install
 EXPOSE 3000
 
 # Run the application
-CMD ["bun", "satrt"]
+CMD ["bun", "run","start"]
