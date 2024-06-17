@@ -16,12 +16,16 @@ open http://localhost:3000
 
 ## End point
 
-| Endpoint       | HTTP     | Description             |
-| -------------- | -------- | ----------------------- |
-| `/movies`      | `GET`    | Get all movies          |
-| `/movies/:id`  | `GET`    | Get movie by id         |
-| `/movies/seed` | `POST`   | Seed all initial movies |
-| `/movies`      | `POST`   | Add new movie           |
-| `/movies`      | `DELETE` | Delete all movies       |
-| `/movies/:id`  | `DELETE` | Delete movie by id      |
-| `/movies/:id`  | `PUT`    | Update movie by id      |
+| Endpoint        | HTTP     | Description                |
+| --------------- | -------- | -------------------------- |
+| `/movies`       | `GET`    | Get all movies             |
+| `/movies/:id`   | `GET`    | Get movie by id            |
+| `/movies/seeds` | `POST`   | Seedes data initial movies |
+| `/movies`       | `POST`   | Add new movie              |
+| `/movies`       | `DELETE` | Delete all movies          |
+| `/movies/:id`   | `DELETE` | Delete movie by id         |
+| `/movies/:id`   | `PUT`    | Update movie by id         |
+
+## Database movies diagram
+
+![image](/img/dbdiagram.svg)
