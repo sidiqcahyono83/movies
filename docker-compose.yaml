@@ -1,6 +1,5 @@
-version: "3"
 services:
-  api:
+  backend:
     image: movies-api
     build:
       context: .
@@ -10,6 +9,8 @@ services:
       - database
   database:
     image: postgres:alpine
-    environment:
-      POSTGRES_USER: example_user
-      POSTGRES_PASSWORD: example_password
+    ports:
+      - "5432:5432"
+    env_file:
+      - path: .env
+        required: true
