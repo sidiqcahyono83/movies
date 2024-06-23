@@ -10,6 +10,35 @@ app.get("/", (c) => {
   });
 });
 
+app.post("/movies/seedes", async (c) => {
+  const newMovie = await prisma.movie.createMany({
+    data: [
+      {
+        title: "Inception",
+        duration: 148,
+        director: "Christopher Nolan",
+      },
+      {
+        title: "The Dark Knight",
+        duration: 152,
+        director: "Christopher Nolan",
+      },
+      {
+        title: "Sniper",
+        duration: 98,
+        director: "Luis Llosa",
+      },
+      {
+        title: "Planet of the Apes",
+        duration: 121,
+        director: "Tim Burton",
+      },
+    ],
+  });
+
+  return c.json(newMovie);
+});
+
 app.get("/movies", async (c) => {
   try {
     const allMovies = await prisma.movie.findMany();
@@ -80,13 +109,27 @@ app.delete("/movies/:id", async (c) => {
   return c.json(`movies by Title ${movie.title} deleted`);
 });
 
-// app.delete("/movies", (c) => {
-//   try {
-//     movies = [];
-//   } catch (error) {}
+app.delete("/movies", async (c) => {
+  try {
+    const movie = await prisma.movie.deleteMany();
+    if (!movie) {
+      return c.json(
+        {
+          message: false,
+          massage: `movie not found!`,
+        },
+        404
+      );
+    }
+    return c.json({
+      success: true,
+      message: `Delete All movies`,
+      data: movie,
+    });
+  } catch (error) {}
 
-//   return c.json({ massage: "All movies succes deleted" });
-// });
+  return c.json({ massage: "All movies succes deleted" });
+});
 
 app.put("movies/:id", async (c) => {
   try {
