@@ -93,7 +93,7 @@ app.put("movies/:id", async (c) => {
     const id = c.req.param("id");
     const body = await c.req.json();
     if (!id) {
-      return c.json({ massage: `Movie not found` });
+      return c.json({ massage: `Movie not found`, Status: 404 });
     }
     const newMovie = await prisma.movie.update({
       where: { id },
@@ -105,7 +105,7 @@ app.put("movies/:id", async (c) => {
     });
     return c.json(newMovie);
   } catch (error) {
-    console.error(`Error get movies : ${error}`);
+    console.error(`Error movies : ${error}`);
   }
 });
 
