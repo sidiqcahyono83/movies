@@ -1,8 +1,7 @@
 import { Hono } from "hono";
-import { dataMovies } from "./data/movies";
+import prisma from "../prisma/prismaclient";
 
 const app = new Hono();
-let movies = dataMovies;
 
 app.get("/", (c) => {
   return c.json({
@@ -11,99 +10,103 @@ app.get("/", (c) => {
   });
 });
 
-app.get("/movies", (c) => {
-  if (movies.length <= 0) {
-    return c.json({ massage: "Data movies is none, please seeds data movies" });
+app.get("/movies", async (c) => {
+  try {
+    const allMovies = await prisma.movie.findMany();
+    return c.json(
+      {
+        success: true,
+        massage: "List data movies",
+        data: allMovies,
+      },
+      200
+    );
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
   }
-
-  return c.json(movies);
-});
-
-app.get("/movies/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const movie = dataMovies.find((movies) => movies.id === id);
-  if (!movie) {
-    return c.json({ message: "movie not found" });
-  }
-  return c.json(movie);
-});
-
-app.delete("/movies/:id", (c) => {
-  const id = Number(c.req.param("id"));
-  const movie = movies.find((movies) => movies.id === id);
-
-  if (!movie) {
-    return c.json({ message: "Movies Not Found" });
-  }
-
-  movies = movies.filter((movies) => movies.id !== id);
-
-  return c.json(`movies by Title ${id} deleted`);
-});
-
-app.delete("/movies", (c) => {
-  movies = [];
-
-  return c.json({ massage: "All movies succes deleted" });
-});
-
-app.post("/movies/seeds", (c) => {
-  movies = dataMovies;
-
-  return c.json({ massage: "Data movies have succes seedes" });
 });
 
 app.post("/movies", async (c) => {
-  const { title, duration, director, actors, producedBy, releaseDate, genre } =
-    await c.req.json();
+  try {
+    const body = await c.req.json();
+    const newMovie = await prisma.movie.create({
+      data: {
+        title: String(body.title),
+        duration: Number(body.duration),
+        director: String(body.director),
+      },
+    });
+    console.log(newMovie);
 
-  const nextId = movies[movies.length - 1].id + 1;
-
-  const newMovie = {
-    id: nextId,
-    title,
-    duration,
-    director,
-    actors,
-    producedBy,
-    releaseDate,
-    genre,
-  };
-
-  movies = [...movies, newMovie];
-
-  return c.json(newMovie);
+    return c.json(newMovie);
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
+  }
 });
 
-app.put("movies/:id", async (c) => {
-  const id = Number(c.req.param("id"));
-  const movie = movies.find((movie) => movie.id === id);
-
-  if (!movie) {
-    return c.json({ massage: `Movie by ${id} not found` });
-  }
-  const { title, duration, director, actors, producedBy, releaseDate, genre } =
-    await c.req.json();
-
-  const newMovie = {
-    id,
-    title,
-    duration,
-    director,
-    actors,
-    producedBy,
-    releaseDate,
-    genre,
-  };
-
-  movies = movies.map((movie) => {
-    if (movie.id === id) {
-      return newMovie;
-    } else {
-      return movie;
+app.get("/movies/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const movie = await prisma.movie.findUnique({
+      where: { id: id },
+    });
+    if (!movie) {
+      return c.json(
+        {
+          message: false,
+          massage: `movie not found!`,
+        },
+        404
+      );
     }
+    return c.json({
+      success: true,
+      message: `Detail movies ${movie.title}`,
+      data: movie,
+    });
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
+  }
+});
+
+app.delete("/movies/:id", async (c) => {
+  const id = c.req.param("id");
+  const movie = await prisma.movie.delete({
+    where: { id: id },
   });
-  return c.json(newMovie);
+  if (!id) {
+    return c.json({ message: "Movies Not Found" });
+  }
+  return c.json(`movies by Title ${movie.title} deleted`);
+});
+
+// app.delete("/movies", (c) => {
+//   try {
+//     movies = [];
+//   } catch (error) {}
+
+//   return c.json({ massage: "All movies succes deleted" });
+// });
+
+app.put("movies/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    if (!id) {
+      return c.json({ massage: `Movie not found` });
+    }
+    const newMovie = await prisma.movie.update({
+      where: { id },
+      data: {
+        title: String(body.title),
+        duration: Number(body.duration),
+        director: String(body.director),
+      },
+    });
+    return c.json(newMovie);
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
+  }
 });
 
 const port = 3000;

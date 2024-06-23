@@ -11,16 +11,16 @@ model Movie {
   id        String @id  @default(cuid())
   title     String @db.VarChar(255)
   duration  Int 
-  director String
+  director  String
 
-  actor Actor @relation(fields: [actorId], references: [id]) 
-  actorId String
+  // actor Actor @relation(fields: [actorId], references: [id]) 
+  // actorId String
 
-  genre Genre @relation(fields: [genreId], references: [id])
-  genreId String
+  // genre Genre @relation(fields: [genreId], references: [id])
+  // genreId String
 
-  producedBy DateTime
-  releaseDate DateTime
+  // producedBy DateTime?
+  // releaseDate DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -28,7 +28,7 @@ model Movie {
 model Actor {
   id String @id @default(cuid())
   actors String
-  movies Movie[]
+  // movies Movie[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,7 +37,7 @@ model Actor {
 model Genre {
   id String @id @default(cuid())
   genre String
-  movies Movie[]
+  // movies Movie[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
