@@ -1,9 +1,4 @@
-type Actor = {
-  id: number;
-  actors: string[];
-};
-
-export const dataActors: Actor[] = [
+export const actors = [
   {
     id: 1,
     actors: ["Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page, Tom Hardy"],
