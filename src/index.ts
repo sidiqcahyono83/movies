@@ -63,6 +63,7 @@ app.post("/movies", async (c) => {
         title: String(body.title),
         duration: Number(body.duration),
         director: String(body.director),
+        producedBy: String(body.producedBy),
       },
     });
     console.log(newMovie);
@@ -144,6 +145,7 @@ app.put("movies/:id", async (c) => {
         title: String(body.title),
         duration: Number(body.duration),
         director: String(body.director),
+        producedBy: String(body.producedBy),
       },
     });
     return c.json(newMovie);
