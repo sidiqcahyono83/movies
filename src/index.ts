@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import prisma from "../lib/prisma";
+import { actors } from "./data/actors";
 
 const app = new Hono();
 
