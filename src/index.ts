@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import prisma from "../prismaclient";
+import prisma from "../lib/prisma";
 
 const app = new Hono();
 
@@ -10,28 +10,32 @@ app.get("/", (c) => {
   });
 });
 
-app.post("/movies/seedes", async (c) => {
+app.post("/movies/seed", async (c) => {
   const newMovie = await prisma.movie.createMany({
     data: [
       {
         title: "Inception",
         duration: 148,
         director: "Christopher Nolan",
+        producedBy: "Warner Bros Pictures",
       },
       {
         title: "The Dark Knight",
         duration: 152,
         director: "Christopher Nolan",
+        producedBy: "Warner Bros Pictures",
       },
       {
         title: "Sniper",
         duration: 98,
         director: "Luis Llosa",
+        producedBy: "Warner Bros Pictures",
       },
       {
         title: "Planet of the Apes",
         duration: 121,
         director: "Tim Burton",
+        producedBy: "Universal Pictures",
       },
     ],
   });
@@ -58,11 +62,32 @@ app.get("/movies", async (c) => {
 app.post("/movies", async (c) => {
   try {
     const body = await c.req.json();
+    const genreData = [];
+    for (let i = 0; i < body.genres.length; i++) {
+      genreData.push({
+        where: { name: body.genres[i] },
+        create: { name: body.genres[i] },
+      });
+    }
+
+    const actorData = [];
+    for (let i = 0; i < body.actors.length; i++) {
+      actorData.push({
+        where: { name: body.actors[i] },
+        create: { name: body.actors[i] },
+      });
+    }
     const newMovie = await prisma.movie.create({
       data: {
         title: String(body.title),
         duration: Number(body.duration),
         director: String(body.director),
+        genres: {
+          connectOrCreate: genreData,
+        },
+        actors: {
+          connectOrCreate: actorData,
+        },
         producedBy: String(body.producedBy),
       },
     });
@@ -151,6 +176,50 @@ app.put("movies/:id", async (c) => {
     return c.json(newMovie);
   } catch (error) {
     console.error(`Error movies : ${error}`);
+  }
+});
+
+// Genre
+app.get("/genres", async (c) => {
+  try {
+    const allGenres = await prisma.genre.findMany();
+    return c.json(
+      {
+        success: true,
+        massage: "List data genres movies",
+        data: allGenres,
+      },
+      200
+    );
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
+  }
+});
+
+app.post("/genres", async (c) => {
+  try {
+    const body = await c.req.json();
+    // const movieData = [];
+    // for (let i = 0; i < body.movies.length; i++) {
+    //   movieData.push({
+    //     where: { title: body.title[i] },
+    //     create: { title: body.title[i] },
+    //   });
+    // }
+
+    const newGenre = await prisma.genre.create({
+      data: {
+        name: String(body.name),
+        // movie: {
+        //   connectOrCreate: movieData,
+        // },
+      },
+    });
+    console.log(newGenre);
+
+    return c.json(newGenre);
+  } catch (error) {
+    console.error(`Error get movies : ${error}`);
   }
 });
 
