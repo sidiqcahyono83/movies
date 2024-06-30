@@ -186,13 +186,13 @@ app.get("/genres", async (c) => {
     return c.json(
       {
         success: true,
-        massage: "List data genres movies",
+        massage: "List data genre movies",
         data: allGenres,
       },
       200
     );
   } catch (error) {
-    console.error(`Error get movies : ${error}`);
+    console.error(`Error get genre : ${error}`);
   }
 });
 
@@ -223,7 +223,195 @@ app.post("/genres", async (c) => {
   }
 });
 
+app.get("/genres/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const genre = await prisma.genre.findUnique({
+      where: { id: id },
+    });
+    if (!genre) {
+      return c.json(
+        {
+          message: false,
+          massage: `genre not found!`,
+        },
+        404
+      );
+    }
+    return c.json({
+      success: true,
+      message: `Detail genre ${genre.name}`,
+      data: genre,
+    });
+  } catch (error) {
+    console.error(`Error get genre : ${error}`);
+  }
+});
+
+app.delete("/genres/:id", async (c) => {
+  const id = c.req.param("id");
+  const genre = await prisma.genre.delete({
+    where: { id: id },
+  });
+  if (!id) {
+    return c.json({ message: "genres Not Found" });
+  }
+  return c.json(`genres by Title ${genre.name} deleted`);
+});
+
+app.delete("/genres", async (c) => {
+  try {
+    const genre = await prisma.genre.deleteMany();
+    if (!genre) {
+      return c.json(
+        {
+          message: false,
+          massage: `genre not found!`,
+        },
+        404
+      );
+    }
+    return c.json({
+      success: true,
+      message: `Delete All genres`,
+      data: genre,
+    });
+  } catch (error) {}
+
+  return c.json({ massage: "All genres succes deleted" });
+});
+
+app.put("genres/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    if (!id) {
+      return c.json({ massage: `genre not found`, Status: 404 });
+    }
+    const newGenre = await prisma.genre.update({
+      where: { id },
+      data: {
+        name: String(body.name),
+      },
+    });
+    return c.json(newGenre);
+  } catch (error) {
+    console.error(`Error genres : ${error}`);
+  }
+});
+
+// Actor
+app.get("/actor", async (c) => {
+  try {
+    const allactor = await prisma.actor.findMany();
+    return c.json(
+      {
+        success: true,
+        massage: "List data actor",
+        data: allactor,
+      },
+      200
+    );
+  } catch (error) {
+    console.error(`Error get actor : ${error}`);
+  }
+});
+
+app.post("/actor", async (c) => {
+  try {
+    const body = await c.req.json();
+
+    const newActor = await prisma.actor.create({
+      data: {
+        name: String(body.name),
+      },
+    });
+    console.log(newActor);
+
+    return c.json(newActor);
+  } catch (error) {
+    console.error(`Error get Actor : ${error}`);
+  }
+});
+
+app.get("/actor/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const actor = await prisma.actor.findUnique({
+      where: { id: id },
+    });
+    if (!actor) {
+      return c.json(
+        {
+          message: false,
+          massage: `actor not found!`,
+        },
+        404
+      );
+    }
+    return c.json({
+      success: true,
+      message: `Detail genre ${actor.name}`,
+      data: actor,
+    });
+  } catch (error) {
+    console.error(`Error get Actor : ${error}`);
+  }
+});
+
+app.delete("/actor/:id", async (c) => {
+  const id = c.req.param("id");
+  const actor = await prisma.actor.delete({
+    where: { id: id },
+  });
+  if (!id) {
+    return c.json({ message: "Actor Not Found" });
+  }
+  return c.json(`Actor by Title ${actor.name} deleted`);
+});
+
+app.delete("/actor", async (c) => {
+  try {
+    const actor = await prisma.actor.deleteMany();
+    if (!actor) {
+      return c.json(
+        {
+          message: false,
+          massage: `Actor not found!`,
+        },
+        404
+      );
+    }
+    return c.json({
+      success: true,
+      message: `Delete All Actors`,
+      data: actor,
+    });
+  } catch (error) {}
+
+  return c.json({ massage: "All Actors succes deleted" });
+});
+
+app.put("actor/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    if (!id) {
+      return c.json({ massage: `genre not found`, Status: 404 });
+    }
+    const newActor = await prisma.actor.update({
+      where: { id },
+      data: {
+        name: String(body.name),
+      },
+    });
+    return c.json(newActor);
+  } catch (error) {
+    console.error(`Error actor : ${error}`);
+  }
+});
+
 const port = 3000;
-console.log(`Rest Movies run in PORT: ${port}`);
+console.log(`Rest genres run in PORT: ${port}`);
 
 export default app;
