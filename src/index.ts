@@ -302,7 +302,7 @@ app.put("genres/:id", async (c) => {
 });
 
 // Actor
-app.get("/actor", async (c) => {
+app.get("/actors", async (c) => {
   try {
     const allactor = await prisma.actor.findMany();
     return c.json(
@@ -318,7 +318,7 @@ app.get("/actor", async (c) => {
   }
 });
 
-app.post("/actor", async (c) => {
+app.post("/actors", async (c) => {
   try {
     const body = await c.req.json();
 
@@ -335,7 +335,7 @@ app.post("/actor", async (c) => {
   }
 });
 
-app.get("/actor/:id", async (c) => {
+app.get("/actors/:id", async (c) => {
   try {
     const id = c.req.param("id");
     const actor = await prisma.actor.findUnique({
@@ -360,7 +360,7 @@ app.get("/actor/:id", async (c) => {
   }
 });
 
-app.delete("/actor/:id", async (c) => {
+app.delete("/actors/:id", async (c) => {
   const id = c.req.param("id");
   const actor = await prisma.actor.delete({
     where: { id: id },
@@ -371,7 +371,7 @@ app.delete("/actor/:id", async (c) => {
   return c.json(`Actor by Title ${actor.name} deleted`);
 });
 
-app.delete("/actor", async (c) => {
+app.delete("/actors", async (c) => {
   try {
     const actor = await prisma.actor.deleteMany();
     if (!actor) {
@@ -393,7 +393,7 @@ app.delete("/actor", async (c) => {
   return c.json({ massage: "All Actors succes deleted" });
 });
 
-app.put("actor/:id", async (c) => {
+app.put("actors/:id", async (c) => {
   try {
     const id = c.req.param("id");
     const body = await c.req.json();
