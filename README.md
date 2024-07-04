@@ -1,4 +1,4 @@
-# REST API MOVIES
+# MOVIES REST API
 
 To install dependencies:
 
@@ -14,7 +14,7 @@ bun run dev
 
 open http://localhost:3000
 
-## End point
+## Endpoint
 
 | Endpoint        | HTTP     | Description                |
 | --------------- | -------- | -------------------------- |
@@ -26,6 +26,6 @@ open http://localhost:3000
 | `/movies/:id`   | `DELETE` | Delete movie by id         |
 | `/movies/:id`   | `PUT`    | Update movie by id         |
 
-## Database movies diagram
+## Diagram Database movies
 
-![image](/img/dbdiagram.svg)
+![image](/images/dbdiagram.svg)

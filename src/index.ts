@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import prisma from "../lib/prisma";
+import prisma from "./lib/prisma";
 import { actors } from "./data/actors";
 
 const app = new Hono();
@@ -46,7 +46,12 @@ app.post("/movies/seed", async (c) => {
 
 app.get("/movies", async (c) => {
   try {
-    const allMovies = await prisma.movie.findMany();
+    const allMovies = await prisma.movie.findMany({
+      include: {
+        actors: true,
+        genres: true,
+      },
+    });
     return c.json(
       {
         success: true,
@@ -109,7 +114,7 @@ app.get("/movies/:id", async (c) => {
     if (!movie) {
       return c.json(
         {
-          message: false,
+          success: false,
           massage: `movie not found!`,
         },
         404
@@ -142,7 +147,7 @@ app.delete("/movies", async (c) => {
     if (!movie) {
       return c.json(
         {
-          message: false,
+          success: false,
           massage: `movie not found!`,
         },
         404
@@ -233,7 +238,7 @@ app.get("/genres/:id", async (c) => {
     if (!genre) {
       return c.json(
         {
-          message: false,
+          success: false,
           massage: `genre not found!`,
         },
         404
