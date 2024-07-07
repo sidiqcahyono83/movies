@@ -6,13 +6,22 @@ To install dependencies:
 bun install
 ```
 
-To run:
+```sh
+setup .env
+```
+
+```sh
+run docker compose up -d
+```
+
+To run in local:
 
 ```sh
 bun run dev
 ```
 
 open http://localhost:3000
+akses https://movies.cahyonomuslimsidiq.com/
 
 ## Endpoint
 
